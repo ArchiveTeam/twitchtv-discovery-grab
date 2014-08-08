@@ -140,7 +140,7 @@ project = Project(
     project_html="""
         <img class="project-logo" alt="Project logo" src="http://archiveteam.org/images/d/d4/Twitch_Logo.png" height="50px" title="aoooo"/>
         <h2>Twitch Phase 1: Content Discovery. <span class="links"><a href="http://twitch.tv/">Website</a> &middot; <a href="http://tracker.archiveteam.org/twitchdisco/">Leaderboard</a></span></h2>
-        <p>Twitch is releasing videos from their PC. <a href="https://archive.org/donate/">Donate for disk space!</a></p>
+        <p>Twitch is releasing videos from their PC. <a href="https://archive.org/donate/">Donate to IA for disk space!</a></p>
     """,
     utc_deadline=datetime.datetime(2014, 8, 20, 23, 59, 0)
 )
