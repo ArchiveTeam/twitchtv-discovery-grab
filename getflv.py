@@ -16,12 +16,13 @@ def main():
     video_id = sys.argv[1]
     output_filename = sys.argv[2]
 
-    urls = list(fetch(video_id))
+    ok_video_type, urls = fetch(video_id)
 
     gzip_file = gzip.open(output_filename, 'w')
 
     json.dump({
         'id': video_id,
+        'video_type': ok_video_type,
         'urls': urls
     }, gzip_file, indent=2)
 
@@ -32,6 +33,7 @@ def fetch(video_id):
     video_id_num = re.search(r'([\d]+)', video_id).group(1)
 
     doc = None
+    ok_video_type = None
 
     for video_type in ['a', 'b', 'c']:
         url = CHUNK_URL.format(video_type + video_id_num)
@@ -42,13 +44,16 @@ def fetch(video_id):
 
         if response.status_code == 200:
             doc = response.json()
+            ok_video_type = video_type
             break
 
     if not doc:
         raise Exception('No results!')
 
-    for chunk in doc['chunks']['live']:
-        yield chunk['url']
+    urls = list(chunk['url'] for chunk in doc['chunks']['live'])
+
+    return (ok_video_type, urls)
+
 
 
 if __name__ == '__main__':
