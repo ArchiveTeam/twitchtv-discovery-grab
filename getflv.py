@@ -10,6 +10,7 @@ import sys
 
 
 CHUNK_URL = 'http://api.twitch.tv/api/videos/{0}?as3=t'
+default_headers = {'User-Agent': 'ArchiveTeam'}
 
 
 def main():
@@ -38,7 +39,7 @@ def fetch(video_id):
     for video_type in ['a', 'b', 'c']:
         url = CHUNK_URL.format(video_type + video_id_num)
         print('Get', url)
-        response = requests.get(url)
+        response = requests.get(url, headers=default_headers,)
 
         print(response.status_code)
 
