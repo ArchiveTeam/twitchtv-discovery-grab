@@ -33,7 +33,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.1.5"):
 VERSION = "20140808.01"
 USER_AGENT = 'ArchiveTeam'
 TRACKER_ID = 'twitchdisco'
-TRACKER_HOST = 'localhost:9080'
+TRACKER_HOST = 'tracker.archiveteam.org'
 
 
 ###########################################################################
