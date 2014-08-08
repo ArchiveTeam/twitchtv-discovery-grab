@@ -16,6 +16,10 @@ VIDEOS_URL = API_BASE + '/channels/{0}/videos'
 default_headers = {'User-Agent': 'ArchiveTeam'}
 
 
+class GiveUpError(Exception):
+    pass
+
+
 def main():
     username = sys.argv[1]
     output_filename = sys.argv[2]
@@ -55,6 +59,8 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
                 if '_total' in doc:
                     print('Remain:', doc['_total'] - len(data))
 
+                retries = 0
+
                 continue
         else:
             if response.status_code == 422 and \
@@ -63,8 +69,9 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
 
             retries += 1
             if retries >= 3:
-                raise Exception('URL {0} failed {1} times'
-                                .format(url, retries))
+                raise GiveUpError('URL {0} failed {1} times'
+                                  .format(url, retries),
+                                  list(data))
             continue
 
         return list(data)
@@ -74,14 +81,24 @@ def fetch(username):
     users = set()
     videos = set()
 
-    # user discovery: who follows this user
-    users.update(twitch_iter(FOLLOWS_URL.format(username),
-                             {'limit': '100'}, 'follows',
-                             lambda x: x['user']['name']))
-    # user discovery: who does this user follow
-    users.update(twitch_iter(FOLLOWING_URL.format(username),
-                             {'limit': '100'}, 'follows',
-                             lambda x: x['channel']['name']))
+    try:
+        # user discovery: who follows this user
+        users.update(twitch_iter(FOLLOWS_URL.format(username),
+                                 {'limit': '100'}, 'follows',
+                                 lambda x: x['user']['name']))
+    except GiveUpError as error:
+        print(error.args[0])
+        users.update(error.args[1])
+
+    try:
+        # user discovery: who does this user follow
+        users.update(twitch_iter(FOLLOWING_URL.format(username),
+                                 {'limit': '100'}, 'follows',
+                                 lambda x: x['channel']['name']))
+    except GiveUpError as error:
+        print(error.args[0])
+        users.update(error.args[1])
+
     # video discovery: highlights
     videos.update(twitch_iter(VIDEOS_URL.format(username),
                               {'limit': '100'},
