@@ -30,7 +30,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.1.5"):
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = "20140808.03"
+VERSION = "20140808.05"
 USER_AGENT = 'ArchiveTeam'
 TRACKER_ID = 'twitchdisco'
 TRACKER_HOST = 'tracker.archiveteam.org'
@@ -104,9 +104,12 @@ class CustomProcessArgs(object):
     def realize(self, item):
         item_type, item_value = item['item_name'].split(':', 1)
 
-        assert item_type == 'flv'
-
-        return ['python', 'getflv.py', item_value, "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
+        if item_type == 'flv':
+            return ['python', 'getflv.py', item_value, "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
+        elif item_type == 'user':
+            return ['python', 'discover.py', item_value, "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
+        else:
+            raise ValueError('unhandled item type: {0}'.format(item_type))
 
 
 def get_hash(filename):
