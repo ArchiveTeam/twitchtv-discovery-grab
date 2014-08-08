@@ -59,6 +59,9 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
                 if '_total' in doc:
                     print('Remain:', doc['_total'] - len(data))
 
+                if '/follows' in url and len(data) > 10000:
+                    return list(data)
+
                 retries = 0
 
                 continue
