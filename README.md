@@ -92,11 +92,11 @@ This supposedly fixes it:
 
 Ensure that you have the Arch equivalent of bzip2 installed as well.
 
-1. Make sure you have `python-pip2` installed.
+1. Make sure you have `python2-pip` installed.
 2. Install [https://aur.archlinux.org/packages/wget-lua/](the wget-lua package from the AUR). 
 3. Run `pip2 install seesaw requests`.
 4. Modify the run-pipeline script in seesaw to point at `#!/usr/bin/python2` instead of `#!/usr/bin/python`.
-5. `adduser --system --group --shell /bin/bash archiveteam`
+5. `useradd --system --group users --shell /bin/bash --create-home archiveteam`
 6. `screen su -c "cd /home/archiveteam/twitchtv-discovery-grab/; run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE" archiveteam`
 
 ### For FreeBSD:
