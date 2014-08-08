@@ -51,7 +51,11 @@ def fetch(video_id):
     if not doc:
         raise Exception('No results!')
 
-    urls = list(chunk['url'] for chunk in doc['chunks']['live'])
+    if 'live' in doc['chunks']:
+        urls = list(chunk['url'] for chunk in doc['chunks']['live'])
+    else:
+        print('No live chunks found for item')
+        urls = []
 
     return (ok_video_type, urls)
 
