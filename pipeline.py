@@ -30,7 +30,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.1.5"):
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = "20140808.01"
+VERSION = "20140808.02"
 USER_AGENT = 'ArchiveTeam'
 TRACKER_ID = 'twitchdisco'
 TRACKER_HOST = 'tracker.archiveteam.org'
@@ -83,7 +83,7 @@ class PrepareDirectories(SimpleTask):
         os.makedirs(dirname)
 
         item["item_dir"] = dirname
-        item["warc_file_base"] = "%s-%s-%s" % (self.warc_prefix, item_name,
+        item["warc_file_base"] = "%s-%s-%s" % (self.warc_prefix, item_name.replace(':', '_'),
             time.strftime("%Y%m%d-%H%M%S"))
 
         open("%(item_dir)s/%(warc_file_base)s.warc.gz" % item, "w").close()
