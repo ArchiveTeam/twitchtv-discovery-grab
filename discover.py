@@ -66,8 +66,7 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
 
                 continue
         else:
-            if response.status_code == 422 and \
-                    'not available on Twitch' in response.text:
+            if response.status_code == 422:
                 return []
 
             retries += 1
