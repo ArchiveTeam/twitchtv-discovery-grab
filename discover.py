@@ -66,6 +66,8 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
 
                 continue
         else:
+            if response.status_code == 404:
+                return data
             if response.status_code == 422:
                 return []
 
