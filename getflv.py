@@ -35,6 +35,7 @@ def fetch(video_id):
 
     doc = None
     ok_video_type = None
+    status_codes = []
 
     for video_type in ['a', 'b', 'c']:
         url = CHUNK_URL.format(video_type + video_id_num)
@@ -42,6 +43,7 @@ def fetch(video_id):
         response = requests.get(url, headers=default_headers,)
 
         print(response.status_code)
+        status_codes.append(response.status_code)
 
         if response.status_code == 200:
             doc = response.json()
@@ -49,6 +51,9 @@ def fetch(video_id):
             break
 
     if not doc:
+        if all(status_code == 404 for status_code in status_codes):
+            return (None, [])
+
         raise Exception('No results!')
 
     if 'live' in doc['chunks']:
