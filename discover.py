@@ -73,6 +73,9 @@ def twitch_iter(url, params, key, func, cond=lambda x: True):
 
             retries += 1
             if retries >= 3:
+                # don't throw GiveUpError if it reliably 504s
+                if response.status_code == 504:
+                    return data
                 raise GiveUpError('URL {0} failed {1} times'
                                   .format(url, retries),
                                   list(data))
